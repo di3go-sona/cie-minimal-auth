@@ -27,8 +27,8 @@ L'idea é di implementare un protocollo di challenge response monodirezionale, i
 |    |              |                         |               |    |
 |    |              | N  := Nonce             |               |    |
 |    |              | S  := ENC(N,k_pub)      |               |    |
-|    |              | N' := DEC(S,k_pub)      |               |    |
-|    |              | if N==N' then -> ok     |               |    |
+|    |              | R  := DEC(S,k_pub)      |               |    |
+|    |              | if N==R  then -> ok     |               |    |
 |    +--------------+          else -> ko     +---------------+    |
 |                                                                  |
 +------------------------------------------------------------------+
