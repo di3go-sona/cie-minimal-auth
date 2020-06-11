@@ -1,8 +1,10 @@
-import Crypto, OpenSSL
+import OpenSSL
+
+import Crypto.PublicKey.RSA
+import Crypto.Hash
 import re
 
 from utils import *
-
 from utils.asn_parser import ASN1
 
 from time import time
@@ -15,12 +17,6 @@ logger.level("TIME", no=45, color="<red>", icon="🚨")
 MAX_APDU_SIZE = 200  # 231 <-> E7
 
 class DEBUG:
-	status = True
-	progress = True
-
-	debug = False
-	text = True
-
 	cache = False
 
 
@@ -197,8 +193,8 @@ class CIE:
 			( Bytearray ) Data returned by the card
 		"""
 
-		if DEBUG.text:
-			logger.debug(f"Reading: {hex(EFID)}")
+
+		logger.debug(f"Reading: {hex(EFID)}")
 
 
 		if self.cached:
@@ -340,25 +336,15 @@ class CIE_Dumper(CIE):
 		name = self.ef_map[efid]
 		d = self.read_EF(efid)
 		try:
-			dump_tag(bytes(d))
+			save_file(bytes(d),name)
+			print(name, bytes(d))
 		except:
 			pass
 
-	def ef_all(self, dump=True, cached=False):
-		for efid, name in self.ef_map.items():
+	def ef_all(self, ):
+		for efid in self.ef_map.keys():
+			self.ef(efid)
 
-			d = None
-			if cached:
-				d = load_file(self.ef_map[efid])
-			else:
-				d = self.read_EF(efid)
-			try:
-				if dump:
-					saveFile(d, CIE.ef_map[efid])
-
-				dump_tag(bytes(d))
-			except:
-				pass
 
 	def ef_fcp_all(self):
 		for efid, name in self.ef_map.items():
@@ -367,7 +353,7 @@ class CIE_Dumper(CIE):
 
 	def sign(self):
 		self.set_CSE_servizi_int_auth()
-		s = self.exec_servizi_int_auth([0xFF] * 256)
+		s = self.exec_servizi_int_auth([0xFF] * 33)
 		print(toHexString(s))
 
 
@@ -404,6 +390,8 @@ class CIE_Token(CIE):
 		return ok
 
 	def passive_auth(self):
+		t_start = time()
+		logger.info("Passive Authentication")
 
 		if self.b_sod is None:
 			self.set_SOD()
@@ -419,6 +407,9 @@ class CIE_Token(CIE):
 		correct &= self.verify_nis()
 		correct &= self.verify_pub_key()
 
+
+		t_end = time()
+		logger.log("TIME", f"Passive auth: {t_end - t_start}")
 		return correct
 
 	def verify_SOD(self):
@@ -553,7 +544,7 @@ class CIE_Token(CIE):
 
 		n = int.from_bytes(mod_tag['bytes'], byteorder='big')
 		e = int.from_bytes(exp_tag['bytes'], byteorder='big')
-		pub_key = RSA.construct((n, e))
+		pub_key = Crypto.PublicKey.RSA.construct((n,e))
 
 		# logger.debug(f"N:{n}\nE:{e}")
 

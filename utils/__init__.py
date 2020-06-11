@@ -1,18 +1,8 @@
 from smartcard.System import readers
-from smartcard.util import toHexString
-from Crypto.PublicKey import RSA
-
 from os.path import join
-import asn1
-import aux.dump
-import sys
 
-def dump_tag(tab_ba):
-    decoder = asn1.Decoder()
-    decoder.start(tab_ba)
-    aux.dump.pretty_print(decoder, sys.stdout)
-
-
+def toHexString(d):
+    return bytes(d).hex()
 def get_readers():
     """
     Retrieves all the available readers
@@ -36,7 +26,7 @@ def get_first_reader():
         return rs[0]
 
 
-def saveFile(data, filename):
+def save_file(data, filename):
     d = (bytes(data))
     with open(join('data',filename), 'wb') as fout:
         fout.write(d)
