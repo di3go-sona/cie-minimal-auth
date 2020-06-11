@@ -42,20 +42,31 @@ A tal proposito sono previste due primitive:
 
 2. **Validazione carta** ( Active Authentication)
 
-Al fine di poter effettuare la validazione attraverso il meccanismo di challenge response, il lettore della carta NFC dovrà prima controllare che la coppia ( ID, Chiave Pubblica ) sia valida. A tal fine sono previste le seguenti operazioni di **lettura**:
+Al fine di poter effettuare la validazione attraverso il meccanismo di challenge response, il lettore della carta NFC dovrà prima controllare che la coppia ( ID, Chiave Pubblica ) sia valida. 
+A tal fine, per la **Passive Authentication** sono previste le seguenti operazioni di **lettura**:
 
 - Lettura Chiave Pubblica (EF.SERVIZI_KPUB)
 - Lettura Certificato Utente (EF.SOD)
-- Lettura Hash Firmato della Chiave pubblica con il Certificato dell'Utente (EF.SOD)
-
-Addizionalmente viene letto anche il NIS (Numero Identificativo Servizi) posto a lettura libera nella CIE per queste situazioni, infatti essi non rilascia alcuna informazione personale, tuttavia in caso di necessitá alcuni organi di competenza son ( o saranno ) dotati di un applicativo per risalire risalire all'identitá dellutente dietro all'identificativo in questione.
-
+- Lettura degli Hash firmati con Chiave pubblica del Certificato dell'Utente (EF.SOD)
 - Lettura Numero identificativo dei servizi (NIS) (EF.NIS)
 
-Il file EF.SOD contiente un PKCS#7 signed data, ovvero un messagio firmato, 
+E le seguenti operazioni di **verifica** :
+- Verifica Firma del Certificato Utente ( Verifica certificato x509 con CA del Governo )
+- Verifica Firma degli Hash ( verifica di un PKCS#7 Signed Data con Certificato Utente )
+- Verifica che gli Hash calcolati a partire da EF.SERVIZI_KPUB e NIS combacino con quelli del punto precende.
 
+Mentre per la **Active Authentication** son previste le seguenti operazioni:
+- Lettura (ID, Chiave Pubblica) ovver (EF.NIS, EF.SERVIZI_KPUB)
+- Verifica che (ID, Chiave Pubblica) siano presenti nel Database ( ciò indica che hanno superato la passive authentication, senza necessita di rieseguirla )
+- Generazione Nonce cauale
+- Invio Nonce alla CIE
+- Ricezione Firma Nonce
+- Verifica Firma Nonce ( Con Chiave Pubblica dei punti precedenti )
 
 
 #### Repository
+Questa repository contiene il codice per poter effettuare tutte le sopra citate operazioni, in particolare si distinguono tre classi:
+- Cie: implementa le operazioni di trasmissione/recezioni pacchetti con la carta ( basso livello )
+- Cie_Token: implementa le operazioni per effettuare i vari meccanismi di autenticazione 
+- Cie_Dumper: implementa alcune utility per estrarre file dalla carta e salvarli localmente
 
-Questa repository contiene un codice per poter
