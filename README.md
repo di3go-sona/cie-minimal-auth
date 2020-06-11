@@ -1,6 +1,6 @@
 ## Cie Minimal Authentication
 
-Questo software é stato realizzato come parte del programma di ricerca del Dipartimento di Ingegneria dell’Informazione, Elettronica e Telecomunicazioni](https://web.uniroma1.it/dip_diet/en) sugli alcuni aspetti di sicurezza della nuova Carta di identitá elettronica ( CIE ).
+Questo software é stato realizzato come parte del programma di ricerca del [Dipartimento di Ingegneria dell’Informazione, Elettronica e Telecomunicazioni](https://web.uniroma1.it/dip_diet/en) sugli alcuni aspetti di sicurezza della nuova Carta di identitá elettronica ( CIE ).
 
 #### Obiettivo
 
