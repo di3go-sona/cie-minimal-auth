@@ -42,26 +42,27 @@ A tal proposito sono previste due primitive:
 
 2. **Validazione carta** ( Active Authentication)
 
-Al fine di poter effettuare la validazione attraverso il meccanismo di challenge response, il lettore della carta NFC dovrà prima controllare che la coppia ( ID, Chiave Pubblica ) sia valida. 
-A tal fine, per la **Passive Authentication** sono previste le seguenti operazioni di **lettura**:
+Al fine di poter effettuare la validazione attraverso il meccanismo di challenge response, il lettore della carta NFC dovrà prima controllare che la coppia ( ID, Chiave Pubblica ) sia valida attraverso il meccanismo di Passive Authentication.
 
-- Lettura Chiave Pubblica (EF.SERVIZI_KPUB)
-- Lettura Certificato Utente (EF.SOD)
-- Lettura degli Hash firmati con Chiave pubblica del Certificato dell'Utente (EF.SOD)
-- Lettura Numero identificativo dei servizi (NIS) (EF.NIS)
+1. A tal proposito, per la **Passive Authentication** sono previste le seguenti operazioni di lettura:
 
-E le seguenti operazioni di **verifica** :
-- Verifica Firma del Certificato Utente ( Verifica certificato x509 con CA del Governo )
-- Verifica Firma degli Hash ( verifica di un PKCS#7 Signed Data con Certificato Utente )
-- Verifica che gli Hash calcolati a partire da EF.SERVIZI_KPUB e NIS combacino con quelli del punto precende.
+  - Lettura Chiave Pubblica (EF.SERVIZI_KPUB)
+  - Lettura Certificato Utente (EF.SOD)
+  - Lettura degli Hash firmati con Chiave pubblica del Certificato dell'Utente (EF.SOD)
+  - Lettura Numero identificativo dei servizi (NIS) (EF.NIS)
 
-Mentre per la **Active Authentication** son previste le seguenti operazioni:
-- Lettura (ID, Chiave Pubblica) ovver (EF.NIS, EF.SERVIZI_KPUB)
-- Verifica che (ID, Chiave Pubblica) siano presenti nel Database ( ciò indica che hanno superato la passive authentication, senza necessita di rieseguirla )
-- Generazione Nonce cauale
-- Invio Nonce alla CIE
-- Ricezione Firma Nonce
-- Verifica Firma Nonce ( Con Chiave Pubblica dei punti precedenti )
+  E le seguenti operazioni di verifica:
+  - Verifica Firma del Certificato Utente ( Verifica certificato x509 con CA del Governo )
+  - Verifica Firma degli Hash ( verifica di un PKCS#7 Signed Data con Certificato Utente )
+  - Verifica che gli Hash calcolati a partire da EF.SERVIZI_KPUB e NIS combacino con quelli del punto precende.
+
+2. Mentre per la **Active Authentication** son previste le seguenti operazioni:
+  - Lettura (ID, Chiave Pubblica) ovver (EF.NIS, EF.SERVIZI_KPUB)
+  - Verifica che (ID, Chiave Pubblica) siano presenti nel Database ( ciò indica che hanno superato la passive authentication, senza necessita di rieseguirla )
+  - Generazione Nonce cauale
+  - Invio Nonce alla CIE
+  - Ricezione Firma Nonce
+  - Verifica Firma Nonce ( Con Chiave Pubblica dei punti precedenti )
 
 
 #### Repository
