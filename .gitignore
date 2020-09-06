@@ -1,4 +1,9 @@
 .idea
-._*
-__pycache__
-/data/*
+
+/__pycache__/
+/src/__pycache/
+/src/utils/__pycache/
+/certs/*
+/docs
+/old
+cie-tokens.db
