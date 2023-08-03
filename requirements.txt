@@ -1,6 +1,6 @@
 pycrypto==2.6.1
 pyopenssl==19.1.0
 pyscard==1.9.9
-loguru==0.5.0
+loguru==0.5.3
 prompt-toolkit==3.0.5
 certvalidator
